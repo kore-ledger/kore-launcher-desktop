@@ -16,10 +16,10 @@ npm run build
 npx vite preview
 ```
 
-
 ## Build in macos | window
 
 ```bash
+# Depends on host platform
 npm run tauri build 
 ```
 
@@ -44,5 +44,4 @@ npm run tauri build
 
 ```bash
  adb install -r /Users/josephgabino/Desktop/KORE-LEDGER/mongoo/src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-signed.apk
-
 ```

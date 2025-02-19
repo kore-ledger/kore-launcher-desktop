@@ -45,3 +45,14 @@ npm run tauri build
 ```bash
  adb install -r /Users/josephgabino/Desktop/KORE-LEDGER/mongoo/src-tauri/gen/android/app/build/outputs/apk/universal/release/app-universal-release-signed.apk
 ```
+
+
+```bash
+brew install openssl
+brew install pkg-config
+echo 'export OPENSSL_DIR=$(brew --prefix openssl)' >> ~/.zshrc
+echo 'export OPENSSL_LIB_DIR=$OPENSSL_DIR/lib' >> ~/.zshrc
+echo 'export OPENSSL_INCLUDE_DIR=$OPENSSL_DIR/include' >> ~/.zshrc
+echo 'export PKG_CONFIG_PATH=$OPENSSL_DIR/lib/pkgconfig' >> ~/.zshrc
+source ~/.zshrc
+```

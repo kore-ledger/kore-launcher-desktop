@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from '@tauri-apps/plugin-dialog';
+import { appDataDir } from '@tauri-apps/api/path';
+
 import "./App.css";
 
 function App() {
@@ -46,22 +48,27 @@ function App() {
   }
 
   // 🔹 Función para inicializar el `Bridge`
-  async function initBridge() {
-    if (!password || !filePath) {
-      setError("Debe ingresar una contraseña y seleccionar un archivo.");
-      return;
-    }
-
-    try {
-      const response = await invoke<string>("init_bridge", { password, filePath });
-      console.log(response);
-      setBridgeInitialized(true);
-      setError(null);
-    } catch (err) {
-      console.error("Error al inicializar el Bridge:", err);
-      setError("Error al inicializar el Bridge");
-    }
+async function initBridge() {
+  if (!password || !filePath) {
+    setError("❌ Debe ingresar una contraseña y seleccionar un archivo.");
+    return;
   }
+
+  const securePath = await appDataDir();
+console.log("Ruta segura:", securePath);
+
+
+  try {
+    const response = await invoke<string>("init_bridge", { password, filePath });
+    console.log("✅ Bridge inicializado:", response);
+    setBridgeInitialized(true);
+    setError(null);
+  } catch (err) {
+    console.error("❌ Error al inicializar el Bridge:", err);
+    setError(`❌ Error al inicializar el Bridge: ${JSON.stringify(err, null, 2)}`);
+  }
+}
+
 
   // 🔹 Función para obtener el Peer ID
   async function fetchPeerId() {

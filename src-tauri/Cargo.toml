@@ -27,7 +27,8 @@ kore-bridge = { path = "../../kore/kore-bridge" }
 tokio = { version = "1.43.0", features = ["full"] }
 tauri-plugin-dialog = "2"
 tauri-plugin-fs = "2"
-
+tauri-plugin-log = "2"
+log = "0.4.26"
 [dependencies.openssl]
 version = "0.10.71"  # or whichever version you are using
 features = ["vendored"]

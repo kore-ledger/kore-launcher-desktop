@@ -1,11 +1,13 @@
+use std::env;
+
 use kore_bridge::{
     clap::Parser,
     settings::{build_config, build_file_path, build_password, command::Args},
     Bridge,
 };
+use log::LevelFilter;
 use tauri::{Manager, State};
 use tokio::sync::OnceCell;
-
 /// Contenedor para la instancia de Bridge.
 struct BridgeState(OnceCell<Bridge>);
 
@@ -21,11 +23,16 @@ async fn init_bridge(
     state: State<'_, BridgeState>,
     password: String,
     file_path: String,
+    secure_path: String,
 ) -> Result<String, String> {
     println!("Initializing Bridge");
     println!("Password: {}", password);
     println!("File Path: {}", file_path);
 
+    /* env::set_var("KORE_BASE_KORE_DB", "/Users/josephgabino/Library/Application Support/com.mongoo.app/db");
+       env::set_var("KORE_BASE_EXTERNAL_DB", "/Users/josephgabino/Library/Application Support/com.mongoo.app/db");
+       env::set_var("KORE_BASE_CONTRACTS_DIR", "/Users/josephgabino/Library/Application Support/com.mongoo.app/contracts");
+    */
     let args = Args::parse();
     let file_path = if file_path.is_empty() {
         build_file_path()
@@ -38,12 +45,20 @@ async fn init_bridge(
         password
     };
 
-    let config = build_config(args.env_config, &file_path);
+    let mut config = build_config(args.env_config, &file_path)
+        .map_err(|e| format!("Error building config: {:?}", e))?;
+    
+    // Secure path
+    config.kore_config.add_path(secure_path.as_str());
+    config.keys_path = format!("{}/{}", secure_path, config.keys_path);
+    println!("Config: {:?}", config);
+
+    // Init bridge
     let bridge = Bridge::build(config, &password, None)
         .await
         .map_err(|e| format!("Error building Bridge: {:?}", e))?;
 
-    // Intentamos establecer la instancia. Si ya se configuró, devolvemos un error.
+    // One instance
     if state.0.set(bridge).is_err() {
         return Err("Bridge ya ha sido inicializado".to_string());
     }
@@ -69,6 +84,18 @@ async fn stop_bridge(state: State<'_, BridgeState>) -> Result<String, String> {
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
+        .plugin(
+            tauri_plugin_log::Builder::new()
+                .max_file_size(50 * 1024 * 1024)
+                .rotation_strategy(tauri_plugin_log::RotationStrategy::KeepAll)
+                .level(LevelFilter::Info)
+                .target(tauri_plugin_log::Target::new(
+                    tauri_plugin_log::TargetKind::LogDir {
+                        file_name: Some("logs".to_string()),
+                    },
+                ))
+                .build(),
+        )
         .plugin(tauri_plugin_fs::init())
         // Se inyecta el estado global de la aplicación.
         .manage(BridgeState::default())

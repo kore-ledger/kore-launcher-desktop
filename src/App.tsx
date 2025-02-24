@@ -2,8 +2,20 @@ import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from '@tauri-apps/plugin-dialog';
 import { appDataDir } from '@tauri-apps/api/path';
-
+import { warn} from '@tauri-apps/plugin-log';
 import "./App.css";
+
+function forwardConsole(
+  fnName: 'log' | 'debug' | 'info' | 'warn' | 'error',
+  logger: (message: string) => Promise<void>
+) {
+  const original = console[fnName];
+  console[fnName] = (message) => {
+    original(message);
+    logger(message);
+  };
+}
+
 
 function App() {
   // Estados para la funcionalidad de greet
@@ -26,6 +38,7 @@ function App() {
       setGreetMsg(message);
     } catch (err) {
       console.error("Error en greet:", err);
+      forwardConsole("warn", warn);
     }
   }
 
@@ -55,11 +68,10 @@ async function initBridge() {
   }
 
   const securePath = await appDataDir();
-console.log("Ruta segura:", securePath);
 
 
   try {
-    const response = await invoke<string>("init_bridge", { password, filePath });
+    const response = await invoke<string>("init_bridge", { password, filePath, securePath });
     console.log("✅ Bridge inicializado:", response);
     setBridgeInitialized(true);
     setError(null);

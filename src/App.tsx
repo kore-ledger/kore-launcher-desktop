@@ -1,7 +1,21 @@
 import { useState } from "react";
 import { invoke } from "@tauri-apps/api/core";
 import { open } from '@tauri-apps/plugin-dialog';
+import { appDataDir } from '@tauri-apps/api/path';
+import { warn} from '@tauri-apps/plugin-log';
 import "./App.css";
+
+function forwardConsole(
+  fnName: 'log' | 'debug' | 'info' | 'warn' | 'error',
+  logger: (message: string) => Promise<void>
+) {
+  const original = console[fnName];
+  console[fnName] = (message) => {
+    original(message);
+    logger(message);
+  };
+}
+
 
 function App() {
   // Estados para la funcionalidad de greet
@@ -24,6 +38,7 @@ function App() {
       setGreetMsg(message);
     } catch (err) {
       console.error("Error en greet:", err);
+      forwardConsole("warn", warn);
     }
   }
 
@@ -46,22 +61,26 @@ function App() {
   }
 
   // 🔹 Función para inicializar el `Bridge`
-  async function initBridge() {
-    if (!password || !filePath) {
-      setError("Debe ingresar una contraseña y seleccionar un archivo.");
-      return;
-    }
-
-    try {
-      const response = await invoke<string>("init_bridge", { password, filePath });
-      console.log(response);
-      setBridgeInitialized(true);
-      setError(null);
-    } catch (err) {
-      console.error("Error al inicializar el Bridge:", err);
-      setError("Error al inicializar el Bridge");
-    }
+async function initBridge() {
+  if (!password || !filePath) {
+    setError("❌ Debe ingresar una contraseña y seleccionar un archivo.");
+    return;
   }
+
+  const securePath = await appDataDir();
+
+
+  try {
+    const response = await invoke<string>("init_bridge", { password, filePath, securePath });
+    console.log("✅ Bridge inicializado:", response);
+    setBridgeInitialized(true);
+    setError(null);
+  } catch (err) {
+    console.error("❌ Error al inicializar el Bridge:", err);
+    setError(`❌ Error al inicializar el Bridge: ${JSON.stringify(err, null, 2)}`);
+  }
+}
+
 
   // 🔹 Función para obtener el Peer ID
   async function fetchPeerId() {

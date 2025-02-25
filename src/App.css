@@ -1,1 +1,16 @@
 @import "tailwindcss";
+
+@theme {
+    --color-primary: #198755;
+    --color-grey: #898d8d;
+    --color-white: #FAFAFA;
+    --color-black: #333139;
+    --color-brown: #9D8B70;
+    --color-red: #F44336;
+}
+
+@layer base {
+    a, button, .cursor-pointer-default {
+      cursor: pointer;
+    }
+  }

@@ -1,174 +1,107 @@
 import { useState } from "react";
-import { invoke } from "@tauri-apps/api/core";
-import { open } from '@tauri-apps/plugin-dialog';
-import { appDataDir } from '@tauri-apps/api/path';
-import { warn} from '@tauri-apps/plugin-log';
+import logo from './assets/logo.svg';
+import { HiEye, HiEyeOff } from 'react-icons/hi';
 import "./App.css";
 
-function forwardConsole(
-  fnName: 'log' | 'debug' | 'info' | 'warn' | 'error',
-  logger: (message: string) => Promise<void>
-) {
-  const original = console[fnName];
-  console[fnName] = (message) => {
-    original(message);
-    logger(message);
+const RegisterPasswordScreen: React.FC = () => {
+  const [password, setPassword] = useState<string>('');
+  const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
+  // Maneja el envío del formulario
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+    e.preventDefault();
+    if (password !== confirmPassword) {
+      alert('Las contraseñas no coinciden');
+      return;
+    }
+
+    console.log('Password:', password);
+    console.log('Confirm Password:', confirmPassword);
+    // Aquí la lógica con Stronghold
   };
-}
-
-
-function App() {
-  // Estados para la funcionalidad de greet
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  // Estados para manejar `kore_bridge`
-  const [bridgeInitialized, setBridgeInitialized] = useState(false);
-  const [peerId, setPeerId] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  // Estados para la contraseña y la ruta del archivo
-  const [password, setPassword] = useState("");
-  const [filePath, setFilePath] = useState("");
-
-  // 🔹 Función para el comando "greet" de Tauri
-  async function greet() {
-    try {
-      const message = await invoke<string>("greet", { name });
-      setGreetMsg(message);
-    } catch (err) {
-      console.error("Error en greet:", err);
-      forwardConsole("warn", warn);
-    }
-  }
-
-  // 🔹 Función para abrir el selector de archivos
-  async function selectFile() {
-    try {
-      const selectedFile = await open({
-        multiple: false,
-        directory: false,
-        filters: [{ name: "Configuración", extensions: ["json", "yml", "yaml", "toml"] }],
-      });
-
-      if (selectedFile) {
-        setFilePath(selectedFile as string);
-      }
-    } catch (err) {
-      console.error("Error al seleccionar archivo:", err);
-      setError("Error al seleccionar archivo");
-    }
-  }
-
-  // 🔹 Función para inicializar el `Bridge`
-async function initBridge() {
-  if (!password || !filePath) {
-    setError("❌ Debe ingresar una contraseña y seleccionar un archivo.");
-    return;
-  }
-
-  const securePath = await appDataDir();
-
-
-  try {
-    const response = await invoke<string>("init_bridge", { password, filePath, securePath });
-    console.log("✅ Bridge inicializado:", response);
-    setBridgeInitialized(true);
-    setError(null);
-  } catch (err) {
-    console.error("❌ Error al inicializar el Bridge:", err);
-    setError(`❌ Error al inicializar el Bridge: ${JSON.stringify(err, null, 2)}`);
-  }
-}
-
-
-  // 🔹 Función para obtener el Peer ID
-  async function fetchPeerId() {
-    try {
-      const id = await invoke<string>("get_peer_id");
-      console.log("Peer ID:", id);
-      setPeerId(id);
-    } catch (err) {
-      console.error("Error al obtener Peer ID:", err);
-      setError("Error al obtener Peer ID");
-    }
-  }
 
   return (
-    <main className="container p-4">
-      {/* Sección de saludo */}
-      <form
-        className="row mb-8"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-          className="px-2 py-1 border rounded mr-2"
-        />
-        <button type="submit" className="px-4 py-1 bg-blue-500 text-white rounded">
-          Greet
-        </button>
-      </form>
-      {greetMsg && <p className="mb-8 text-xl">{greetMsg}</p>}
+    <div className="min-h-screen flex flex-col items-center justify-center bg-primary p-4">
+      <div className="w-full max-w-md bg-white shadow-md rounded-md p-6">
+        {/* Título */}
+        <img src={logo} alt="Logo" className="w-30 h-30 mx-auto mb-8" />
 
-      <hr className="my-4" />
+        {/* Mensaje de alerta/Importante */}
+        <p className="text-center text-red font-semibold mb-8">
+          IMPORTANTE NO OLVIDAR LA CONTRASEÑA
+        </p>
 
-      {/* Sección de `kore_bridge` */}
-      <h2 className="text-2xl mb-4">Kore Bridge</h2>
+        {/* Formulario */}
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+          {/* Campo Contraseña */}
+          <div>
+            <label htmlFor="password" className="block text-black font-medium mb-1">
+              Contraseña
+            </label>
+            <div className="relative">
+              <input
+                id="password"
+                type={showPassword ? "text" : "password"}
+                className="w-full p-2 border border-grey rounded focus:outline-none focus:border-primary"
+                placeholder="Ingresa tu contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                {showPassword ? (
+                  <HiEyeOff className="h-5 w-5 text-black" />
+                ) : (
+                  <HiEye className="h-5 w-5 text-black" />
+                )}
+              </button>
+            </div>
+          </div>
 
-      {/* Input para la contraseña */}
-      <div className="mb-4">
-        <label className="block mb-2">Contraseña:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="px-2 py-1 border rounded w-full"
-          placeholder="Ingrese su contraseña..."
-        />
+          {/* Campo Repetir Contraseña */}
+          <div>
+            <label htmlFor="confirmPassword" className="block text-black font-medium mb-1">
+              Repetir Contraseña
+            </label>
+            <div className="relative">
+              <input
+                id="confirmPassword"
+                type={showConfirmPassword ? "text" : "password"}
+                className="w-full p-2 border border-grey rounded focus:outline-none focus:border-primary"
+                placeholder="Repite tu contraseña"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+              <button
+                type="button"
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center"
+              >
+                {showConfirmPassword ? (
+                  <HiEyeOff className="h-5 w-5 text-black" />
+                ) : (
+                  <HiEye className="h-5 w-5 text-black" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Botón para registrar */}
+          <button
+            type="submit"
+            className="mt-4 w-full py-2 bg-primary text-white font-semibold rounded hover:bg-green-700 transition-colors"
+          >
+            Registrar
+          </button>
+        </form>
       </div>
-
-      {/* Selector de archivos */}
-      <div className="mb-4">
-        <label className="block mb-2">Archivo de configuración:</label>
-        <button
-          onClick={selectFile}
-          className="px-4 py-2 bg-gray-300 text-black rounded"
-        >
-          {filePath ? "📁 " + filePath : "Seleccionar Archivo"}
-        </button>
-      </div>
-
-      {/* Botón para inicializar el Bridge */}
-      <button
-        onClick={initBridge}
-        disabled={bridgeInitialized}
-        className={`px-4 py-2 rounded ${bridgeInitialized ? "bg-gray-500" : "bg-green-500 text-white"}`}
-      >
-        {bridgeInitialized ? "Bridge Inicializado ✅" : "Iniciar Bridge"}
-      </button>
-
-      {/* Botón para obtener el Peer ID */}
-      <button
-        onClick={fetchPeerId}
-        disabled={!bridgeInitialized}
-        className={`px-4 py-2 ml-2 rounded ${bridgeInitialized ? "bg-blue-500 text-white" : "bg-gray-500"}`}
-      >
-        Obtener Peer ID
-      </button>
-
-      {/* Mostrar Peer ID si está disponible */}
-      {peerId && <p className="mt-4">🆔 Peer ID: <strong>{peerId}</strong></p>}
-
-      {/* Mostrar errores si hay */}
-      {error && <p className="mt-4 text-red-500">⚠️ {error}</p>}
-    </main>
+    </div>
   );
-}
+};
 
-export default App;
+export default RegisterPasswordScreen;

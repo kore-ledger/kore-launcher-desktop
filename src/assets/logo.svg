@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="240.77092mm"
+   height="205.05206mm"
+   viewBox="0 0 240.77092 205.05206"
+   version="1.1"
+   id="svg1"
+   inkscape:export-filename="hoja.png"
+   inkscape:export-xdpi="96"
+   inkscape:export-ydpi="96"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:document-units="mm">
+    <inkscape:page
+       x="-4.4822163e-22"
+       y="0"
+       width="240.77092"
+       height="205.05206"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
+  <defs
+     id="defs1" />
+  <g
+     inkscape:label="Capa 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(35.71839,31.485387)">
+    <g
+       transform="matrix(0.26458333,0,0,0.26458333,-470.42917,-83.608333)"
+       id="g2">
+      <g
+         id="g1">
+        <path
+           d="m 1739.78,404.17 c -163.55,166.837 -29.64,300.473 15.44,337.628 -54.88,60.603 -97.08,127.334 -111.83,197.381 -3.36,15.97 15.44,30.56 42,32.545 2.07,0.173 4.14,0.276 6.18,0.276 24.06,-0.034 44.93,-10.773 48.04,-25.501 48.81,-231.445 448.27,-433.591 506.94,-462.147 15.38,-2.021 44.07,-2.884 58.33,15.107 11.45,14.399 3.94,24.534 0.95,27.642 -244.84,139.316 -351.1,235.313 -307.26,277.7 9.12,8.805 26.08,13.795 42.69,13.725 177.87,-3.366 312.21,-41.592 399.32,-113.641 207.9,-171.914 64.97,-474.113 58.79,-486.89 -4.78,-9.859 -17.86,-17.49 -34.42,-20.062 -16.5,-2.573 -34.09,0.259 -46.25,7.476 -86.07,51.14 -191.35,62.121 -302.86,73.741 -138.83,14.434 -282.43,29.403 -376.06,125.02 z"
+           stroke="none"
+           stroke-width="1"
+           stroke-linecap="butt"
+           stroke-linejoin="miter"
+           stroke-miterlimit="4"
+           fill="#198753"
+           fill-rule="evenodd"
+           fill-opacity="1"
+           id="path1" />
+      </g>
+    </g>
+  </g>
+</svg>

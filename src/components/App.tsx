@@ -32,16 +32,18 @@ const RegisterPasswordScreen: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-white p-4">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-white-marfil p-4">
       <div className="w-full max-w-md">
         {/* Título */}
-        <img src={logo} alt="Logo" className="w-50 h-50 mx-auto" />
+        <img src={logo} alt="Logo" className="w-100 h-50 mx-auto" />
 
         {/* Mensaje de alerta/Importante */}
         <p className="text-center text-black font-semibold mb-8">
-          Esta contraseña se utilizará para cifrar su material criptográfico. Es muy importante que la anote
-          en algún lugar seguro, ya que se le volverá a solicitar si utiliza otro dispositivo.
+          Esta contraseña se utilizará para cifrar su material criptográfico.{' '}
+          <span className="text-[var(--color-red)]">¡IMPORTANTE!</span>{' '}
+          Es muy importante que la anote en <strong>algún lugar seguro</strong>, ya que se le volverá a solicitar si utiliza otro dispositivo.
         </p>
+
 
         {/* Formulario */}
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
@@ -55,7 +57,7 @@ const RegisterPasswordScreen: React.FC = () => {
                 id="password"
                 autoCapitalize="none"
                 type={showPassword ? "text" : "password"}
-                className="w-full p-2 border border-[var(--color-grey-dark)] rounded focus:outline-none focus:border-[var(--color-primary)]"
+                className="w-full p-2 border bg-white border-[var(--color-grey-dark)] rounded focus:outline-none focus:border-[var(--color-primary)]"
                 placeholder="Ingresa tu contraseña"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -84,7 +86,7 @@ const RegisterPasswordScreen: React.FC = () => {
                 id="confirmPassword"
                 autoCapitalize="none"
                 type={showConfirmPassword ? "text" : "password"}
-                className="w-full p-2 border border-[var(--color-grey-dark)] rounded focus:outline-none focus:border-[var(--color-primary)]"
+                className="w-full p-2 border bg-white border-[var(--color-grey-dark)] rounded focus:outline-none focus:border-[var(--color-primary)]"
                 placeholder="Repite tu contraseña"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -110,11 +112,11 @@ const RegisterPasswordScreen: React.FC = () => {
                 {passwordConditions.map((cond, index) => (
                   <li key={index} className="flex justify-center items-center">
                     {cond.isValid ? (
-                      <HiCheckCircle className="text-green-500 mr-2" />
+                      <HiCheckCircle className="text-green mr-2" />
                     ) : (
-                      <HiXCircle className="text-red-500 mr-2" />
+                      <HiXCircle className="text-red mr-2" />
                     )}
-                    <span className={cond.isValid ? "text-green-500" : "text-red-500"}>
+                    <span className={cond.isValid ? "text-green" : "text-red"}>
                       {cond.label}
                     </span>
                   </li>
@@ -126,7 +128,7 @@ const RegisterPasswordScreen: React.FC = () => {
           {/* Botón para registrar */}
           <button
             type="submit"
-            className="mt-4 w-full py-2 bg-[var(--color-primary)] text-[var(--color-white)] font-semibold rounded hover:bg-red-600 transition-colors"
+            className="mt-4 w-full py-2 bg-[var(--color-primary)] text-[var(--color-white)] font-semibold rounded hover:bg-brown transition-colors"
           >
             Generar material criptográfico
           </button>

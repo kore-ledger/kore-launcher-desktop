@@ -2,11 +2,11 @@
 
 @theme {
   --color-primary: #198755;       /* en lugar de "0xFFFB0000" */
-  --color-grey-dark: #BFBFBF;       /* en lugar de "0xFFBFBFBF" */
-  --color-white: #FAFAFA;
+  --color-white-marfil: #FAFAFA;
   --color-black: #333139;
   --color-brown: #9D8B70;
-  --color-red: #FF0000;
+  --color-red: #F44336;
+  --color-green: #3FA651;
 }
 
 @layer base {

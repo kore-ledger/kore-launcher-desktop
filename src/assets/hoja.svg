@@ -2,16 +2,14 @@
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
 
 <svg
-   width="1289.3541mm"
-   height="205.05203mm"
-   viewBox="0 0 1289.3541 205.05203"
+   width="240.77092mm"
+   height="205.05206mm"
+   viewBox="0 0 240.77092 205.05206"
    version="1.1"
    id="svg1"
-   inkscape:export-filename="hoja.svg"
+   inkscape:export-filename="hoja.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
-   sodipodi:docname="hojalateral.svg"
-   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns="http://www.w3.org/2000/svg"
@@ -25,24 +23,23 @@
      inkscape:pageopacity="0.0"
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
-     inkscape:document-units="mm"
-     inkscape:zoom="0.18407587"
-     inkscape:cx="1504.8143"
-     inkscape:cy="154.82746"
-     inkscape:window-width="1920"
-     inkscape:window-height="1009"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
-     inkscape:window-maximized="1"
-     inkscape:current-layer="layer1"
-     showguides="true" />
+     inkscape:document-units="mm">
+    <inkscape:page
+       x="-4.4822163e-22"
+       y="0"
+       width="240.77092"
+       height="205.05206"
+       id="page2"
+       margin="0"
+       bleed="0" />
+  </sodipodi:namedview>
   <defs
      id="defs1" />
   <g
      inkscape:label="Capa 1"
      inkscape:groupmode="layer"
      id="layer1"
-     transform="translate(35.718392,31.485385)">
+     transform="translate(35.71839,31.485387)">
     <g
        transform="matrix(0.26458333,0,0,0.26458333,-470.42917,-83.608333)"
        id="g2">
@@ -61,16 +58,5 @@
            id="path1" />
       </g>
     </g>
-    <text
-       xml:space="preserve"
-       style="font-size:180px;font-family:Dubai;-inkscape-font-specification:Dubai;text-align:start;writing-mode:lr-tb;direction:ltr;text-anchor:start;fill:#198753;stroke-width:0.352999"
-       x="260.47165"
-       y="118.18215"
-       id="text2"><tspan
-         sodipodi:role="line"
-         id="tspan2"
-         style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:180px;font-family:Arial;-inkscape-font-specification:Arial;stroke-width:0.353"
-         x="260.47165"
-         y="118.18215">Kore Ledger</tspan></text>
   </g>
 </svg>

@@ -9,6 +9,7 @@ import {
   HiMoon,
 } from 'react-icons/hi';
 import logo from '../assets/hoja.svg';
+import { useTranslation } from 'react-i18next';
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,8 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [toggled, setToggled] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<string>('tablaOrdenes');
   const [darkMode, setDarkMode] = useState<boolean>(false);
+
+  const { i18n } = useTranslation();
 
   // Al montar, verifica la preferencia del usuario
   useEffect(() => {
@@ -107,14 +110,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         {/* Pie del Sidebar: Selector de idioma y cambio de tema */}
         <div className="p-4 text-center text-black dark:text-white">
           <p>Estás navegando en:</p>
-          <button
-            className="underline block"
-            onClick={() => {
-              // Lógica para cambiar idioma
+          <select
+            value={i18n.language}
+            onChange={(e) => {
+              console.log(e.target.value);
+              i18n.changeLanguage(e.target.value);
             }}
+            className="underline bg-transparent border-none outline-none appearance-none mx-auto"
           >
-            ES / EN
-          </button>
+            <option value="es">ES</option>
+            <option value="en">EN</option>
+          </select>
           <button
             className="underline block mt-2"
             onClick={toggleDarkMode}

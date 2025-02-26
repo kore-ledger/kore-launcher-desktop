@@ -1,12 +1,15 @@
 import { useState } from "react";
 import logo from '../assets/logo.svg';
 import { HiEye, HiEyeOff, HiCheckCircle, HiXCircle } from 'react-icons/hi';
+import { Trans, useTranslation } from "react-i18next";
 
 const RegisterPasswordScreen: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+
+  const { t } = useTranslation();
 
   // Condiciones de validación para la contraseña, incluyendo que ambas coincidan
   const passwordConditions = [
@@ -48,7 +51,7 @@ const RegisterPasswordScreen: React.FC = () => {
           {/* Campo Contraseña */}
           <div>
             <label htmlFor="password" className="block text-black dark:text-white font-medium mb-1">
-              Contraseña
+              {t('password')}
             </label>
             <div className="relative">
               <input
@@ -77,7 +80,7 @@ const RegisterPasswordScreen: React.FC = () => {
           {/* Campo Repetir Contraseña */}
           <div>
             <label htmlFor="confirmPassword" className="block text-black dark:text-white font-medium mb-1">
-              Repetir Contraseña
+              {t('repeatPassword')}
             </label>
             <div className="relative">
               <input
@@ -128,7 +131,7 @@ const RegisterPasswordScreen: React.FC = () => {
             type="submit"
             className="mt-4 w-full py-2 bg-[var(--color-primary)] text-[var(--color-white)] font-semibold rounded hover:bg-[var(--color-brown)] transition-colors"
           >
-            Generar material criptográfico
+            {t('generateMaterial')}
           </button>
         </form>
       </div>

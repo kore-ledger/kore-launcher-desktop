@@ -1,7 +1,8 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-primary: #198755;       /* en lugar de "0xFFFB0000" */
+  --color-primary: #198755;
   --color-white-marfil: #FAFAFA;
   --color-black: #333139;
   --color-brown: #9D8B70;
@@ -10,7 +11,16 @@
 }
 
 @layer base {
-    a, button, .cursor-pointer-default {
-      cursor: pointer;
-    }
+
+  a,
+  button,
+  .cursor-pointer-default {
+    cursor: pointer;
   }
+
+  body {
+    font-family: 'Montserrat', sans-serif;
+  }
+
+
+}

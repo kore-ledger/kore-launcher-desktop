@@ -1,7 +1,13 @@
 // Layout.tsx
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Sidebar, Menu, MenuItem } from 'react-pro-sidebar';
-import { HiOutlineClipboardList, HiLogout, HiMenu } from 'react-icons/hi';
+import {
+  HiOutlineClipboardList,
+  HiLogout,
+  HiMenu,
+  HiSun,
+  HiMoon,
+} from 'react-icons/hi';
 import logo from '../assets/hoja.svg';
 
 interface LayoutProps {
@@ -11,15 +17,43 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [toggled, setToggled] = useState<boolean>(false);
   const [activeItem, setActiveItem] = useState<string>('tablaOrdenes');
+  const [darkMode, setDarkMode] = useState<boolean>(false);
+
+  // Al montar, verifica la preferencia del usuario
+  useEffect(() => {
+    const userTheme = localStorage.getItem("theme");
+    if (
+      userTheme === "dark" ||
+      (!userTheme && window.matchMedia("(prefers-color-scheme: dark)").matches)
+    ) {
+      document.documentElement.classList.add("dark");
+      setDarkMode(true);
+    } else {
+      document.documentElement.classList.remove("dark");
+      setDarkMode(false);
+    }
+  }, []);
+
+  const toggleDarkMode = () => {
+    if (darkMode) {
+      document.documentElement.classList.remove("dark");
+      localStorage.theme = "light";
+      setDarkMode(false);
+    } else {
+      document.documentElement.classList.add("dark");
+      localStorage.theme = "dark";
+      setDarkMode(true);
+    }
+  };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex min-h-screen dark:bg-gray-900">
       {/* Sidebar usando react-pro-sidebar */}
       <Sidebar
         toggled={toggled}
         breakPoint="md"
         onBackdropClick={() => setToggled(false)}
-        backgroundColor="white"
+        backgroundColor={darkMode ? 'var(--color-black)' : 'white'}
       >
         {/* Encabezado personalizado */}
         <div className="flex items-center justify-center p-4">
@@ -31,7 +65,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           menuItemStyles={{
             button: ({ active }) => ({
               backgroundColor: active ? 'var(--color-primary)' : undefined,
-              color: active ? 'white' : 'black',
+              color: active ? 'white' : (darkMode ? 'white' : 'black'),
               ...(active && {
                 '&:hover': {
                   backgroundColor: 'var(--color-primary)',
@@ -47,7 +81,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             }),
           }}
         >
-
           <MenuItem
             active={activeItem === 'tablaOrdenes'}
             icon={<HiOutlineClipboardList className="text-2xl" />}
@@ -71,26 +104,42 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
           </MenuItem>
         </Menu>
 
-        {/* Pie personalizado para el selector de idioma */}
-        <div className="p-4 text-center" style={{ color: 'black' }}>
+        {/* Pie del Sidebar: Selector de idioma y cambio de tema */}
+        <div className="p-4 text-center text-black dark:text-white">
           <p>Estás navegando en:</p>
           <button
-            className="underline"
+            className="underline block"
             onClick={() => {
               // Lógica para cambiar idioma
             }}
           >
             ES / EN
           </button>
+          <button
+            className="underline block mt-2"
+            onClick={toggleDarkMode}
+          >
+            {darkMode ? (
+              <>
+                <HiSun className="inline-block mr-1" />
+                Modo Claro
+              </>
+            ) : (
+              <>
+                <HiMoon className="inline-block mr-1" />
+                Modo Oscuro
+              </>
+            )}
+          </button>
         </div>
       </Sidebar>
 
       {/* Contenido principal */}
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow dark:bg-gray-800">
         {/* Botón hamburguesa para móvil */}
         <div className="md:hidden p-4">
           <button onClick={() => setToggled(!toggled)}>
-            <HiMenu className="h-6 w-6 text-black" />
+            <HiMenu className="h-6 w-6 text-black dark:text-white" />
           </button>
         </div>
         <main className="p-4">{children}</main>

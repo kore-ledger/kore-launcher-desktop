@@ -1,14 +1,17 @@
 import { useState } from "react";
 import logo from '../assets/logo.svg';
-import { HiEye, HiEyeOff, HiCheckCircle, HiXCircle } from 'react-icons/hi';
+import { HiEye, HiEyeOff, HiCheckCircle, HiXCircle, HiArrowLeft } from 'react-icons/hi';
 import { Trans, useTranslation } from "react-i18next";
 
-const GenerateCrypto: React.FC = () => {
+interface GenerateCryptoProps {
+  goBack: () => void;
+}
+
+const GenerateCrypto: React.FC<GenerateCryptoProps> = ({ goBack }) => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
-
   const { t } = useTranslation();
 
   // Condiciones de validación para la contraseña, incluyendo que ambas coincidan
@@ -21,22 +24,33 @@ const GenerateCrypto: React.FC = () => {
   ];
 
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
-    // Verifica que todas las condiciones sean válidas
     const allValid = passwordConditions.every(condition => condition.isValid);
     if (!allValid) {
       alert('La contraseña no cumple con todas las condiciones');
       return;
     }
-    console.log('Password:', password);
-    console.log('Confirm Password:', confirmPassword);
-    // Aquí la lógica con Stronghold
+    try {
+      alert("Contraseña válida")
+      // Aquí podrías redirigir o actualizar la UI según se requiera
+    } catch (error) {
+      alert("Error al guardar la contraseña en el vault");
+    }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white-marfil dark:bg-gray-900 p-4">
       <div className="w-full max-w-md">
+        {/* Botón para volver */}
+        <button
+          onClick={goBack}
+          className="flex items-center text-[var(--color-primary)] mb-4"
+        >
+          <HiArrowLeft className="mr-1" />
+          Volver
+        </button>
+
         {/* Título */}
         <img src={logo} alt="Logo" className="w-100 h-50 mx-auto" />
 

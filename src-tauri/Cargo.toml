@@ -29,6 +29,7 @@ tauri-plugin-dialog = "2"
 tauri-plugin-fs = "2"
 tauri-plugin-log = "2"
 log = "0.4.26"
+tauri-plugin-stronghold = "2"
 [dependencies.openssl]
 version = "0.10.71"  # or whichever version you are using
 features = ["vendored"]

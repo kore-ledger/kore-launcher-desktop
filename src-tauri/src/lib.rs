@@ -30,8 +30,8 @@ async fn init_bridge(
     println!("File Path: {}", file_path);
 
     /* env::set_var("KORE_BASE_KORE_DB", "/Users/josephgabino/Library/Application Support/com.mongoo.app/db");
-       env::set_var("KORE_BASE_EXTERNAL_DB", "/Users/josephgabino/Library/Application Support/com.mongoo.app/db");
-       env::set_var("KORE_BASE_CONTRACTS_DIR", "/Users/josephgabino/Library/Application Support/com.mongoo.app/contracts");
+    env::set_var("KORE_BASE_EXTERNAL_DB", "/Users/josephgabino/Library/Application Support/com.mongoo.app/db");
+    env::set_var("KORE_BASE_CONTRACTS_DIR", "/Users/josephgabino/Library/Application Support/com.mongoo.app/contracts");
     */
     let args = Args::parse();
     let file_path = if file_path.is_empty() {
@@ -47,7 +47,7 @@ async fn init_bridge(
 
     let mut config = build_config(args.env_config, &file_path)
         .map_err(|e| format!("Error building config: {:?}", e))?;
-    
+
     // Secure path
     config.kore_config.add_path(secure_path.as_str());
     config.keys_path = format!("{}/{}", secure_path, config.keys_path);
@@ -97,7 +97,6 @@ pub fn run() {
                 .build(),
         )
         .plugin(tauri_plugin_fs::init())
-        // Se inyecta el estado global de la aplicación.
         .manage(BridgeState::default())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())

@@ -7,6 +7,7 @@ import {
   HiMenu,
   HiSun,
   HiMoon,
+  HiOutlineGlobe,
 } from 'react-icons/hi';
 import logo from '../assets/hoja.svg';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +21,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   const [activeItem, setActiveItem] = useState<string>('tablaOrdenes');
   const [darkMode, setDarkMode] = useState<boolean>(false);
 
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   // Al montar, verifica la preferencia del usuario
   useEffect(() => {
@@ -50,17 +51,17 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   };
 
   return (
-    <div className="flex min-h-screen dark:bg-gray-900">
+    <div className="flex min-h-screen dark:bg-gray-800">
       {/* Sidebar usando react-pro-sidebar */}
       <Sidebar
         toggled={toggled}
         breakPoint="md"
         onBackdropClick={() => setToggled(false)}
-        backgroundColor={darkMode ? 'var(--color-black)' : 'white'}
+        backgroundColor={darkMode ? 'var(--color-gray-800)' : 'white'}
       >
         {/* Encabezado personalizado */}
         <div className="flex items-center justify-center p-4">
-          <img src={logo} alt="Acciona" className="h-20 w-20" />
+          <img src={logo} alt="Acciona" className="h-15 w-15" />
         </div>
 
         {/* Menú principal con estilos personalizados */}
@@ -108,36 +109,28 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         </Menu>
 
         {/* Pie del Sidebar: Selector de idioma y cambio de tema */}
-        <div className="p-4 text-center text-black dark:text-white">
-          <p>Estás navegando en:</p>
-          <select
-            value={i18n.language}
-            onChange={(e) => {
-              console.log(e.target.value);
-              i18n.changeLanguage(e.target.value);
-            }}
-            className="underline bg-transparent border-none outline-none appearance-none mx-auto"
-          >
-            <option value="es">ES</option>
-            <option value="en">EN</option>
-          </select>
+        <div className="absolute bottom-4 left-0 w-full flex flex-col items-center">
+          {/* Selector de idioma con fondo verde e icono */}
           <button
-            className="underline block mt-2"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white font-semibold rounded-md shadow-md"
+            onClick={() => {
+              const newLang = i18n.language === "es" ? "en" : "es";
+              i18n.changeLanguage(newLang);
+            }}
+          >
+            <HiOutlineGlobe className="text-lg" />
+            {i18n.language.toUpperCase()}
+          </button>
+
+          {/* Botón para cambiar el modo oscuro */}
+          <button
+            className="mt-3 flex items-center justify-center gap-2 px-4 py-2 bg-gray-700 text-white font-semibold rounded-md shadow-md"
             onClick={toggleDarkMode}
           >
-            {darkMode ? (
-              <>
-                <HiSun className="inline-block mr-1" />
-                Modo Claro
-              </>
-            ) : (
-              <>
-                <HiMoon className="inline-block mr-1" />
-                Modo Oscuro
-              </>
-            )}
+            {darkMode ? <HiSun className="text-lg" /> : <HiMoon className="text-lg" />}
+            {darkMode ? t("sidebar.lightMode") : t("sidebar.darkMode")}
           </button>
-        </div>
+        </div>;
       </Sidebar>
 
       {/* Contenido principal */}
@@ -148,7 +141,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             <HiMenu className="h-6 w-6 text-black dark:text-white" />
           </button>
         </div>
-        <main className="p-4">{children}</main>
+        <main>{children}</main>
       </div>
     </div>
   );

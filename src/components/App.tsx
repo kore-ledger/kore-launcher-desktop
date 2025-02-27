@@ -13,12 +13,13 @@ const RegisterPasswordScreen: React.FC = () => {
 
   // Condiciones de validación para la contraseña, incluyendo que ambas coincidan
   const passwordConditions = [
-    { label: "Al menos un número", isValid: /[0-9]/.test(password) },
-    { label: "Mínimo 5 caracteres", isValid: password.length >= 5 },
-    { label: "Las contraseñas coinciden", isValid: password !== "" && confirmPassword !== "" && password === confirmPassword },
-    { label: "Al menos una letra minúscula", isValid: /[a-z]/.test(password) },
-    { label: "Al menos una letra mayúscula", isValid: /[A-Z]/.test(password) },
+    { label: t("passwordConditions.number"), isValid: /[0-9]/.test(password) },
+    { label: t("passwordConditions.minLength"), isValid: password.length >= 5 },
+    { label: t("passwordConditions.match"), isValid: password !== "" && confirmPassword !== "" && password === confirmPassword },
+    { label: t("passwordConditions.lowercase"), isValid: /[a-z]/.test(password) },
+    { label: t("passwordConditions.uppercase"), isValid: /[A-Z]/.test(password) },
   ];
+
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
@@ -41,9 +42,11 @@ const RegisterPasswordScreen: React.FC = () => {
 
         {/* Mensaje de alerta/Importante */}
         <p className="text-center text-black dark:text-white font-semibold mb-8">
-          Esta contraseña se utilizará para cifrar su material criptográfico.{' '}
-          <span className="text-[var(--color-red)]">¡IMPORTANTE!</span>{' '}
-          Es muy importante que la anote en <strong>algún lugar seguro</strong>, ya que se le volverá a solicitar si utiliza otro dispositivo.
+          <Trans i18nKey="passwordInfo">
+            Esta contraseña se utilizará para cifrar su material criptográfico.
+            <strong className="text-red">¡IMPORTANTE!</strong>
+            Es muy importante que la anote en <strong>algún lugar seguro</strong>, ya que se le volverá a solicitar si utiliza otro dispositivo.
+          </Trans>
         </p>
 
         {/* Formulario */}

@@ -112,7 +112,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <div className="absolute bottom-4 left-0 w-full flex flex-col items-center">
           {/* Selector de idioma con fondo verde e icono */}
           <button
-            className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white font-semibold rounded-md shadow-md"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-primary text-white font-semibold rounded-md shadow-md hover:bg-[var(--color-brown)] transition-colors"
             onClick={() => {
               const newLang = i18n.language === "es" ? "en" : "es";
               i18n.changeLanguage(newLang);
@@ -130,7 +130,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
             {darkMode ? <HiSun className="text-lg" /> : <HiMoon className="text-lg" />}
             {darkMode ? t("sidebar.lightMode") : t("sidebar.darkMode")}
           </button>
-        </div>;
+        </div>
       </Sidebar>
 
       {/* Contenido principal */}

@@ -3,7 +3,7 @@ import logo from '../assets/logo.svg';
 import { HiEye, HiEyeOff, HiCheckCircle, HiXCircle } from 'react-icons/hi';
 import { Trans, useTranslation } from "react-i18next";
 
-const RegisterPasswordScreen: React.FC = () => {
+const GenerateCrypto: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -142,4 +142,4 @@ const RegisterPasswordScreen: React.FC = () => {
   );
 };
 
-export default RegisterPasswordScreen;
+export default GenerateCrypto;

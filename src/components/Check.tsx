@@ -19,7 +19,7 @@ const CheckVault: React.FC = () => {
           navigate("/generate", { replace: true });
         }
       } catch (err) {
-        console.error("Error al verificar el vault:", err);
+        console.error("Error de permisos:", err);
         navigate("/generate", { replace: true });
       }
     }

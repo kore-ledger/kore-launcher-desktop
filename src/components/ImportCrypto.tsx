@@ -34,7 +34,7 @@ const ImportCrypto: React.FC = () => {
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-white-marfil dark:bg-gray-900 p-4">
-            <div className="w-full max-w-md">
+            <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
                 {/* Botón para volver */}
                 <button
                     onClick={() => navigate("/generate")}

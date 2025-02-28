@@ -78,11 +78,6 @@ const ImportCryptoNode: React.FC = () => {
     }
   }
 
-  // Si el usuario ya ingresó la contraseña en un inicio previo (guardada en el vault),
-  // se podría actualizar el estado automáticamente. Sin embargo, dado que la idea es que
-  // se pida cada 3 inicios de aplicación, aquí se espera siempre que el usuario ingrese.
-  // Podrías usar `useVault()` para acceder a la contraseña guardada y compararla o incluso
-  // para actualizarla tras el reingreso, según tu lógica de negocio.
 
   return (
     <main className="container p-4">

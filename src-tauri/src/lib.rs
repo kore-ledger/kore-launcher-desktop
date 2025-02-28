@@ -1,9 +1,7 @@
 use std::env;
 
 use kore_bridge::{
-    clap::Parser,
-    settings::{build_config, build_file_path, build_password, command::Args},
-    Bridge,
+    clap::Parser, config, settings::{build_config, build_file_path, build_password, command::Args}, Bridge
 };
 use log::LevelFilter;
 use tauri::{Manager, State};

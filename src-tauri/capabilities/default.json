@@ -9,8 +9,11 @@
     "core:default",
     "opener:default",
     "dialog:default",
-    "fs:default",
     "log:default",
-    "stronghold:default"
+    "fs:default",
+    {
+      "identifier": "fs:allow-app-write",
+      "allow": [{ "path": "$APPDATA/*" }]
+    }
   ]
 }

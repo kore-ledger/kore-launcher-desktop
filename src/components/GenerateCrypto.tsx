@@ -2,17 +2,23 @@ import { useState } from "react";
 import logo from '../assets/logo.svg';
 import { HiEye, HiEyeOff, HiCheckCircle, HiXCircle, HiArrowLeft } from 'react-icons/hi';
 import { Trans, useTranslation } from "react-i18next";
+import { Navigate, useNavigate } from "react-router-dom";
 
-interface GenerateCryptoProps {
-  goBack: () => void;
-}
+import { invoke } from "@tauri-apps/api/core";
+import { appDataDir } from '@tauri-apps/api/path';
+import { initBridge, saveConfigFiles, selectConfigFile, translateError } from "../utils/bridgeUtils";
 
-const GenerateCrypto: React.FC<GenerateCryptoProps> = ({ goBack }) => {
+const GenerateCrypto: React.FC = () => {
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const [error, setError] = useState<string | null>(null);
+  const [configfilePath, configsetFilePath] = useState("");
+  const [configNodefilePath, configNodesetFilePath] = useState("");
   const { t } = useTranslation();
+  const navigate = useNavigate();
+
 
   // Condiciones de validación para la contraseña, incluyendo que ambas coincidan
   const passwordConditions = [
@@ -24,18 +30,40 @@ const GenerateCrypto: React.FC<GenerateCryptoProps> = ({ goBack }) => {
   ];
 
 
+  async function handleConfigSelectFile() {
+    try {
+      const path = await selectConfigFile(t);
+      configsetFilePath(path);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  async function handleConfigNodeSelectFile() {
+    try {
+      const path = await selectConfigFile(t);
+      configNodesetFilePath(path);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const allValid = passwordConditions.every(condition => condition.isValid);
-    if (!allValid) {
+    if (!allValid || !configfilePath || !configNodefilePath) {
       alert('La contraseña no cumple con todas las condiciones');
       return;
     }
     try {
       alert("Contraseña válida")
-      // Aquí podrías redirigir o actualizar la UI según se requiera
+      // mover a support los dos archivos que se han leido
+      saveConfigFiles(configfilePath, configNodefilePath);
+      initBridge(password, configNodefilePath);
     } catch (error) {
-      alert("Error al guardar la contraseña en el vault");
+      alert("asdasdasd")
+      const errorMsg = error instanceof Error ? error.message : String(error);
+      setError(translateError(t, errorMsg));
     }
   };
 
@@ -44,11 +72,11 @@ const GenerateCrypto: React.FC<GenerateCryptoProps> = ({ goBack }) => {
       <div className="w-full max-w-md">
         {/* Botón para volver */}
         <button
-          onClick={goBack}
+          onClick={() => navigate("/import")}
           className="flex items-center text-[var(--color-primary)] mb-4"
         >
           <HiArrowLeft className="mr-1" />
-          Volver
+          Importar material criptográfico
         </button>
 
         {/* Título */}
@@ -65,6 +93,28 @@ const GenerateCrypto: React.FC<GenerateCryptoProps> = ({ goBack }) => {
 
         {/* Formulario */}
         <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+          {/* Selector de archivos */}
+          <div className="mb-4">
+            <label className="block mb-2">Archivo de configuración:</label>
+            <button
+             type="button"
+              onClick={handleConfigSelectFile}
+              className="px-4 py-2 bg-gray-300 text-black rounded"
+            >
+              {configfilePath ? "📁 " + configfilePath : "Seleccionar Archivo"}
+            </button>
+          </div>
+          {/* Selector de archivos */}
+          <div className="mb-4">
+            <label className="block mb-2">Archivo del nodo:</label>
+            <button
+             type="button"
+              onClick={handleConfigNodeSelectFile}
+              className="px-4 py-2 bg-gray-300 text-black rounded"
+            >
+              {configNodefilePath ? "📁 " + configNodefilePath : "Seleccionar Archivo"}
+            </button>
+          </div>
           {/* Campo Contraseña */}
           <div>
             <label htmlFor="password" className="block text-black dark:text-white font-medium mb-1">
@@ -151,6 +201,8 @@ const GenerateCrypto: React.FC<GenerateCryptoProps> = ({ goBack }) => {
             {t('generateMaterial')}
           </button>
         </form>
+        {/* Mostrar errores si hay */}
+        {error && <p className="mt-4 text-red">⚠️ {error}</p>}
       </div>
     </div>
   );

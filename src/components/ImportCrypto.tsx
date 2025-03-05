@@ -3,35 +3,34 @@ import logo from '../assets/logo.svg';
 import { HiEye, HiEyeOff, HiArrowLeft } from 'react-icons/hi';
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
-import { appDataDir } from "@tauri-apps/api/path";
-import { invoke } from "@tauri-apps/api/core";
 import { initBridge, translateError } from "../utils/bridgeUtils";
-
+ 
 const ImportCrypto: React.FC = () => {
     const [password, setPassword] = useState<string>('');
     const [showPassword, setShowPassword] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
     const { t } = useTranslation();
     const navigate = useNavigate();
-
-
-
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+ 
+ 
+ 
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         if (!password) {
             setError("Debe ingresar una contraseña y seleccionar un archivo.");
             return;
         }
+        console.log("Iniciando bridge...");
         try {
             alert("Contraseña válida")
-            initBridge(password, "/config.json");
+            await initBridge(password);
         } catch (error) {
             alert("")
             const errorMsg = error instanceof Error ? error.message : String(error);
             setError(translateError(t, errorMsg));
         }
     };
-
+ 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-white-marfil dark:bg-gray-900 p-4">
             <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
@@ -45,7 +44,7 @@ const ImportCrypto: React.FC = () => {
                 </button>
                 {/* Título */}
                 <img src={logo} alt="Logo" className="w-100 h-50 mx-auto" />
-
+ 
                 {/* Formulario */}
                 <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
                     {/* Campo Contraseña */}
@@ -54,7 +53,7 @@ const ImportCrypto: React.FC = () => {
                             {t('password')}
                         </label>
                         <div className="relative">
-
+ 
                             <input
                                 id="password"
                                 autoCapitalize="none"
@@ -77,10 +76,10 @@ const ImportCrypto: React.FC = () => {
                             </button>
                         </div>
                     </div>
-
+ 
                     {/* Botón para registrar */}
                     <button
-                        type="button"
+                        type="submit"
                         className="mt-4 w-full py-2 bg-[var(--color-primary)] text-[var(--color-white)] font-semibold rounded hover:bg-[var(--color-brown)] transition-colors"
                     >
                         {t('decryptMaterial')}
@@ -92,5 +91,5 @@ const ImportCrypto: React.FC = () => {
         </div>
     );
 };
-
+ 
 export default ImportCrypto;

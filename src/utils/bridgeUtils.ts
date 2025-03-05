@@ -13,8 +13,9 @@ export function translateError(t: TFunction, errorMsg: string): string {
 }
 
 // Initialize bridge with secure path
-export async function initBridge(password: string, filePath: string): Promise<string> {
+export async function initBridge(password: string): Promise<string> {
   const securePath = await path.join(await appDataDir(), 'config');
+  const filePath = await path.join(securePath, 'config-node.json');
   return invoke<string>("init_bridge", { password, filePath, securePath });
 }
 

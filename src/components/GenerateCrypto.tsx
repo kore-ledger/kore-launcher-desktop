@@ -5,7 +5,7 @@ import { HiEye, HiEyeOff, HiCheckCircle, HiXCircle, HiArrowLeft } from "react-ic
 import { Trans, useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { removeAllFiles, saveConfigFiles, selectConfigFile, initBridge, translateError } from "../utils/bridgeUtils";
-
+ 
 const GenerateCrypto: React.FC = () => {
   const [step, setStep] = useState<number>(1);
   const [password, setPassword] = useState<string>("");
@@ -17,7 +17,7 @@ const GenerateCrypto: React.FC = () => {
   const [configNodefilePath, configNodesetFilePath] = useState("");
   const { t } = useTranslation();
   const navigate = useNavigate();
-
+ 
   const passwordConditions = [
     { label: t("passwordConditions.number"), isValid: /[0-9]/.test(password) },
     { label: t("passwordConditions.minLength"), isValid: password.length >= 5 },
@@ -25,7 +25,7 @@ const GenerateCrypto: React.FC = () => {
     { label: t("passwordConditions.lowercase"), isValid: /[a-z]/.test(password) },
     { label: t("passwordConditions.uppercase"), isValid: /[A-Z]/.test(password) },
   ];
-
+ 
   async function handleConfigSelectFile() {
     try {
       const path = await selectConfigFile(t);
@@ -34,7 +34,7 @@ const GenerateCrypto: React.FC = () => {
       console.error(err);
     }
   }
-
+ 
   async function handleConfigNodeSelectFile() {
     try {
       const path = await selectConfigFile(t);
@@ -43,7 +43,7 @@ const GenerateCrypto: React.FC = () => {
       console.error(err);
     }
   }
-
+ 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>): Promise<void> => {
     e.preventDefault();
     const allValid = passwordConditions.every((cond) => cond.isValid);
@@ -56,8 +56,8 @@ const GenerateCrypto: React.FC = () => {
       await removeAllFiles();
       console.log("Files removed");
       await saveConfigFiles(configfilePath, configNodefilePath);
-      console.log("Files saved");
-      await initBridge(password, configNodefilePath);
+      console.log("Files saveeed");
+      await initBridge(password);
       console.log("Bridge initialized");
     } catch (error) {
       alert("Ocurrió un error");
@@ -65,7 +65,7 @@ const GenerateCrypto: React.FC = () => {
       setError(translateError(t, errorMsg));
     }
   };
-
+ 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-white-marfil dark:bg-gray-900 p-4">
       <div className="w-full max-w-md bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6">
@@ -73,9 +73,9 @@ const GenerateCrypto: React.FC = () => {
           <HiArrowLeft className="mr-1" />
           Importar material criptográfico
         </button>
-
+ 
         <img src={logo} alt="Logo" className="w-100 h-50 mx-auto" />
-
+ 
         <p className="text-center text-black dark:text-white font-semibold mb-4">
           <Trans i18nKey="passwordInfo">
             Esta contraseña se utilizará para cifrar su material criptográfico.
@@ -86,7 +86,7 @@ const GenerateCrypto: React.FC = () => {
         <p className="text-center text-black dark:text-white font-semibold mb-8">
           En caso de que ya haya desplegado un nodo se borrará la información anterior.
         </p>
-
+ 
         <form onSubmit={handleSubmit}>
           {/* Contenedor animado con layout para ajustar el alto */}
           <motion.div layout className="relative">
@@ -174,7 +174,7 @@ const GenerateCrypto: React.FC = () => {
                         </button>
                       </div>
                     </div>
-
+ 
                     <div>
                       <label htmlFor="confirmPassword" className="block text-black dark:text-white font-medium mb-1">
                         {t("repeatPassword")}
@@ -202,7 +202,7 @@ const GenerateCrypto: React.FC = () => {
                         </button>
                       </div>
                     </div>
-
+ 
                     {password && (
                       <div className="mt-2 text-center">
                         <ul className="text-sm space-y-1">
@@ -221,7 +221,7 @@ const GenerateCrypto: React.FC = () => {
                         </ul>
                       </div>
                     )}
-
+ 
                     <div className="flex justify-between">
                       <button
                         type="button"
@@ -248,5 +248,6 @@ const GenerateCrypto: React.FC = () => {
     </div>
   );
 };
-
+ 
 export default GenerateCrypto;
+ 

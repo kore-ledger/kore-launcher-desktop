@@ -8,6 +8,8 @@ import * as path from '@tauri-apps/api/path';
 export function translateError(t: TFunction, errorMsg: string): string {
   if (errorMsg.includes("PKCS#5 encryption failed")) {
     return t("error.incorrectPassword");
+  } else if (errorMsg.includes("it could not be initialized globally")) {
+    return t("error.bridgeInitialization");
   }
   return errorMsg;
 }
@@ -15,9 +17,44 @@ export function translateError(t: TFunction, errorMsg: string): string {
 // Initialize bridge with secure path
 export async function initBridge(password: string): Promise<string> {
   const securePath = await path.join(await appDataDir(), 'config');
-  const filePath = await path.join(securePath, 'config-node.json');
-  return invoke<string>("init_bridge", { password, filePath, securePath });
+  const nodePath = await path.join(securePath, 'config-node.json');
+  const configPath = await path.join(securePath, 'config.json');
+  return invoke<string>("init_bridge", { password, nodePath,configPath, securePath });
 }
+
+// Get peer ID
+export async function peerID(): Promise<string> {
+  try {
+    const result = await invoke<string>("get_peer_id");
+    return result;
+  } catch (error) {
+    console.error("Error en peerID:", error);
+    throw new Error("Error al obtener Peer ID");
+  }
+}
+
+// Get authorized subjects
+export async function getAuth(): Promise<string[]> {
+  try {
+    const result = await invoke<string[]>("get_auth");
+    return result;
+  } catch (error) {
+    console.error("Error en getAuth:", error);
+    throw new Error("Error al obtener autorización");
+  }
+}
+
+// Put authorization
+export async function putAuth(): Promise<void> {
+  try {
+    const result =  await invoke<string>("put_auth");
+    console.log("putAuth result:", result);
+  } catch (error) {
+    console.error("Error en putAuth:", error);
+    throw new Error("Error al establecer autorización");
+  }
+}
+
 
 // select file
 export async function selectConfigFile(t: TFunction): Promise<string> {

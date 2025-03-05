@@ -24,6 +24,7 @@ const ImportCrypto: React.FC = () => {
         try {
             alert("Contraseña válida")
             await initBridge(password);
+            navigate("/wait");
         } catch (error) {
             alert("")
             const errorMsg = error instanceof Error ? error.message : String(error);

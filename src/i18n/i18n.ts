@@ -14,7 +14,8 @@ const resources = {
       error: {
         incorrectPassword: "Incorrect password",
         missingFields: "You must enter a password and select a file.",
-        fileSelection: "Error when selecting file"
+        fileSelection: "Error when selecting file",
+        bridgeInitialization: "Only one instance of the bridge can be initialized globally. Close the application and try again.",
       },
       passwordConditions: {
         number: "At least one number",
@@ -41,7 +42,8 @@ const resources = {
       error: {
         incorrectPassword: "La contraseña es incorrecta.",
         missingFields: "Debe ingresar una contraseña y seleccionar un archivo.",
-        fileSelection: "Error al seleccionar archivo"
+        fileSelection: "Error al seleccionar archivo",
+        bridgeInitialization: "Solo se puede inicializar una instancia del bridge globalmente, cierre la aplicación e intente de nuevo.",
       },
       passwordConditions: {
         number: "Al menos un número",

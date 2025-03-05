@@ -1,0 +1,19 @@
+{
+    "kore": {
+      "network": {
+        "node_type": "Ephemeral",
+        "listen_addresses": ["/ip4/0.0.0.0/tcp/50001"],
+        "routing": {
+          "boot_nodes": ["/ip4/172.17.0.1/tcp/50000/p2p/12D3KooWPxvv6uPXtCcFAk2Rim6z4pZhJ9qNdjCgiKLmJzBa9gNm"]
+        }
+      },
+      "base": {
+        "external_db": "/dbg",
+        "kore_db": "/db",
+        "contracts_dir": "/contracts"
+      },
+      "keys_path": "/keys",
+      "prometheus": "0.0.0.0:3051"
+    }
+  }
+  

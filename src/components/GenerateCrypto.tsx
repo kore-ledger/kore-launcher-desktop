@@ -59,6 +59,7 @@ const GenerateCrypto: React.FC = () => {
       console.log("Files saveeed");
       await initBridge(password);
       console.log("Bridge initialized");
+      navigate("/wait");
     } catch (error) {
       alert("Ocurrió un error");
       const errorMsg = error instanceof Error ? error.message : String(error);

@@ -4,7 +4,7 @@
         "node_type": "Ephemeral",
         "listen_addresses": ["/ip4/0.0.0.0/tcp/50001"],
         "routing": {
-          "boot_nodes": ["/ip4/172.17.0.1/tcp/50000/p2p/12D3KooWPxvv6uPXtCcFAk2Rim6z4pZhJ9qNdjCgiKLmJzBa9gNm"]
+          "boot_nodes": ["/ip4/127.0.0.1/tcp/50000/p2p/12D3KooWDycFgwvZNXSzW3asT83jsn5kUnPL3E2wjbxRVeRerYtb"]
         }
       },
       "base": {

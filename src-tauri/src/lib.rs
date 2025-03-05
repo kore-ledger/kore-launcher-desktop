@@ -1,13 +1,10 @@
 use std::env;
-
 use kore_bridge::{
     clap::Parser,
-    config,
     settings::{build_config, build_file_path, build_password, command::Args},
     Bridge,
 };
 use log::LevelFilter;
-use openssl::conf;
 use serde::Deserialize;
 use tauri::{Manager, State};
 use tokio::{fs, sync::OnceCell};
@@ -20,7 +17,7 @@ struct Config {
 /// Contenedor para la instancia de Bridge y las rutas de configuración.
 struct BridgeState {
     bridge: OnceCell<Bridge>,
-    config: OnceCell<Config>,
+    config: OnceCell<Vec<Config>>,
 }
 
 impl Default for BridgeState {
@@ -77,7 +74,7 @@ async fn init_bridge(
 
     // Almacenar configuración en el estado
     let data = fs::read_to_string(config_path).await.map_err(|e| e.to_string())?;
-    let auth_data: Config = serde_json::from_str(&data).map_err(|e| e.to_string())?;
+    let auth_data: Vec<Config> = serde_json::from_str(&data).map_err(|e| e.to_string())?;
     if state.config.set(auth_data).is_err() {
         return Err("Config ya ha sido inicializado".to_string());
     }
@@ -85,6 +82,30 @@ async fn init_bridge(
     Ok("Bridge initialized successfully".to_string())
 }
 
+#[tauri::command]
+async fn get_config_governance_ids(state: State<'_, BridgeState>) -> Result<Vec<String>, String> {
+    let config = state.config.get().ok_or("Config not initialized")?;
+    // iteramos para obtener todas las gobernanzas
+    Ok(config.iter().map(|g| g.governance_id.clone()).collect::<Vec<String>>())
+}
+
+#[tauri::command]
+async fn get_all_governance_ids(state: State<'_, BridgeState>) -> Result<Vec<String>, String> {
+    let bridge = state.bridge.get().ok_or("Bridge not initialized")?;
+    let govs = bridge.get_all_govs(Some(true))
+        .await
+        .map_err(|e| e.to_string())?;
+    let governance_ids = govs.into_iter()
+        .map(|gov| gov.governance_id)
+        .collect();
+    Ok(governance_ids)
+}
+
+#[tauri::command]
+async fn update_governance(state: State<'_, BridgeState>, governance: String) -> Result<String, String> {
+    let bridge = state.bridge.get().ok_or("Bridge not initialized")?;
+    bridge.update_subject(governance).await.map_err(|e| e.to_string())
+}
 /// Retorna el peer_id del Bridge almacenado en el estado.
 #[tauri::command]
 async fn get_peer_id(state: State<'_, BridgeState>) -> Result<String, String> {
@@ -93,34 +114,28 @@ async fn get_peer_id(state: State<'_, BridgeState>) -> Result<String, String> {
 }
 
 #[tauri::command]
-async fn get_auth(state: State<'_, BridgeState>) -> Result<Vec<String>, String> {
+async fn get_controller_id(state: State<'_, BridgeState>) -> Result<String, String> {
     let bridge = state.bridge.get().ok_or("Bridge not initialized")?;
-    bridge.get_all_auth_subjects().await.map_err(|e| e.to_string())
+    Ok(bridge.controller_id())
 }
 
 #[tauri::command]
-async fn get_all_governance_ids(state: State<'_, BridgeState>) -> Result<bool, String> {
+async fn get_auth(state: State<'_, BridgeState>, governance: String) -> Result<Vec<String>, String> {
     let bridge = state.bridge.get().ok_or("Bridge not initialized")?;
-    let config = state.config.get().ok_or("Config not initialized")?;
-    let governance_ids = match bridge.get_all_govs(Some(true)).await {
-        Ok(govs) => govs.into_iter().map(|gov| gov.governance_id).collect::<Vec<String>>(),
-        Err(e) => {
-            println!("Error al obtener gobernanza: {}", e);
-            return Ok(false);
-        }
-    };
-    Ok(governance_ids.into_iter().any(|id| id == config.governance_id))
+    bridge.get_witnesses_subject(governance).await.map_err(|e| e.to_string())
 }
-
 
 #[tauri::command]
 async fn put_auth(
     state: State<'_, BridgeState>,
+    governance: String,
 ) -> Result<String, String> {
     log::info!("put_authhhhhh");
     let bridge = state.bridge.get().ok_or("Bridge not initialized")?;
     let config = state.config.get().ok_or("Config not initialized")?;
-    bridge.put_auth_subject(config.governance_id.clone(), config.witness.clone()).await.map_err(|e| e.to_string())
+    // search governance in config
+    let governance = config.iter().find(|g| g.governance_id == governance).ok_or("Gobernanza no encontrada")?;
+    bridge.put_auth_subject(governance.governance_id.clone(), governance.witness.clone()).await.map_err(|e| e.to_string())
 }
 
 /// Detiene el Bridge (por ejemplo, cancelando su token).
@@ -156,7 +171,10 @@ pub fn run() {
             stop_bridge,
             get_auth,
             put_auth,
-
+            get_all_governance_ids,
+            get_config_governance_ids,
+            update_governance,
+            get_controller_id
         ])
         .on_window_event(|window, event| {
             if let tauri::WindowEvent::CloseRequested { .. } = event {

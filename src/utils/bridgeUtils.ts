@@ -33,10 +33,20 @@ export async function peerID(): Promise<string> {
   }
 }
 
-// Get authorized subjects
-export async function getAuth(): Promise<string[]> {
+export async function controllerID(): Promise<string> {
   try {
-    const result = await invoke<string[]>("get_auth");
+    const result = await invoke<string>("get_controller_id");
+    return result;
+  } catch (error) {
+    console.error("Error en controllerID:", error);
+    throw new Error("Error al obtener Controller ID");
+  }
+}
+
+// Get authorized subjects
+export async function getAuth(governance:String): Promise<string[]> {
+  try {
+    const result = await invoke<string[]>("get_auth", { governance });
     return result;
   } catch (error) {
     console.error("Error en getAuth:", error);
@@ -45,9 +55,9 @@ export async function getAuth(): Promise<string[]> {
 }
 
 // Put authorization
-export async function putAuth(): Promise<void> {
+export async function putAuth(governance:String): Promise<void> {
   try {
-    const result =  await invoke<string>("put_auth");
+    const result =  await invoke<string>("put_auth", { governance });
     console.log("putAuth result:", result);
   } catch (error) {
     console.error("Error en putAuth:", error);
@@ -55,7 +65,35 @@ export async function putAuth(): Promise<void> {
   }
 }
 
+export async function getAllGovernanceIds(): Promise<string[]> {
+  try {
+    const result = await invoke<string[]>("get_all_governance_ids");
+    return result;
+  } catch (error) {
+    console.error("Error en getAllGovernanceIds:", error);
+    throw new Error("Error al obtener governance IDs");
+  }
+}
 
+export async function getConfigGovernanceIds(): Promise<string[]> {
+  try {
+    const result = await invoke<string[]>("get_config_governance_ids");
+    return result;
+  } catch (error) {
+    console.error("Error en getConfigGovernanceIds:", error);
+    throw new Error("Error al obtener governance IDs del config");
+  }
+}
+
+export async function updateGovernance(governance: string): Promise<void> {
+  try {
+    const result = await invoke<string>("update_governance", { governance });
+    console.log("updateGovernance result:", result);
+  } catch (error) {
+    console.error("Error en updateGovernance:", error);
+    throw new Error("Error al actualizar governance");
+  }
+}
 // select file
 export async function selectConfigFile(t: TFunction): Promise<string> {
   try {

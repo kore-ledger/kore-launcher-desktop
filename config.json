@@ -1,14 +1,26 @@
 [
   {
-    "governance_id": "JzO2v-NHsDPZpZ77oWb05XPde2g4hAxM_9Badx9LFK_I",
+    "governance_id": "J7j3Eku4dL8tp5KinwRP9auytl8R56laeuhLVETRiixU",
     "witness": [
-      "E0jVKjVcqm93NirqZuh0fAg-zo-o0frerGm3olEAAjro"
+      "EPczmt8mwnSqwbtvVoDFxW1Lb6mBh_hhB-dJ8TyyBokQ"
+    ],
+    "subjects": [
+      {
+        "name": "subject1",
+        "schema": "schema1"
+      }
     ]
   },
   {
-    "governance_id": "JzO2v-NHsDPZpZ77oWb05XPde2g4hAxM_9Badx9LFK_I",
+    "governance_id": "Jnf-eWI5FbA3BRj4o9IpPxwYMxoymUuApKt1JBRO0VB4",
     "witness": [
-      "E0jVKjVcqm93NirqZuh0fAg-zo-o0frerGm3olEAAjro"
+      "EPczmt8mwnSqwbtvVoDFxW1Lb6mBh_hhB-dJ8TyyBokQ"
+    ],
+    "subjects": [
+      {
+        "name": "subject1",
+        "schema": "schema1"
+      }
     ]
   }
 ]
